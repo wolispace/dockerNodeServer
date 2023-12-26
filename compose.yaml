@@ -6,6 +6,8 @@ services:
       - .:/app
       - data:/data
     working_dir: /app
+    environment:
+      - NODE_ENV=local
     command: npm start
     ports:
       - 8080:8080
