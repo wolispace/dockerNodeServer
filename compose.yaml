@@ -1,0 +1,14 @@
+version: '3'
+services:
+  app:
+    image: node:alpine
+    volumes:
+      - .:/app
+      - data:/data
+    working_dir: /app
+    command: npm start
+    ports:
+      - 8080:8080
+
+volumes:
+  data:
