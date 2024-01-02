@@ -1,3 +1,10 @@
 body {
-    background: slategray;
+  background: slategray;
+}
+
+.footer {
+  position: fixed;
+  bottom: 1px;
+  background: wheat;
+  width: 100%;
 }

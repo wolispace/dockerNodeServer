@@ -3,12 +3,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 const templates = require('./templates/templates.js');
 
-const nodeEnv = process.env.NODE_ENV;
+const app = {
+  nodeEnv: process.env.NODE_ENV,
+  host: '0.0.0.0',
+  showHost: 'localhost',
+  port: 8080,
+};
 
-const host = '0.0.0.0';
-const showHost = 'localhost';
-const port = 8080;
-
+app.url = `http://${app.showHost}:${app.port}`;
 
 const requestListener = function (req, res) {
   // Parse the URL to get the path
@@ -26,7 +28,7 @@ function showHomePage(res) {
   let params = {
     version: 123, 
     content: buildScriptList(),
-    info: `<div>Hello world! from [${nodeEnv}] http://${showHost}:${port}</div>`,
+    info: `<div>Hello world! from [${app.nodeEnv}] ${app.url}</div>`,
   }
   template = templates.render(fs, 'index.html', params);
   res.write(template);
@@ -34,8 +36,8 @@ function showHomePage(res) {
 }
 
 const server = http.createServer(requestListener);
-server.listen(port, host, () => {
-  console.log(`Server is running on [${nodeEnv}] http://${showHost}:${port}`);
+server.listen(app.port, app.host, () => {
+  console.log(`Server is running on [${app.nodeEnv}] ${app.url}`);
 });
 
 function readFolder(folderPath) {
