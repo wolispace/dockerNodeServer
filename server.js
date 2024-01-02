@@ -1,6 +1,7 @@
 const http = require("node:http");
 const fs = require('node:fs');
 const path = require('node:path');
+const templates = require('./templates/templates.js');
 
 const nodeEnv = process.env.NODE_ENV;
 
@@ -22,14 +23,12 @@ const requestListener = function (req, res) {
 };
 
 function showHomePage(res) {
-  let template = readTemplate('templates/index.html');
-  res.setHeader('Content-Type', 'text/html');
-  res.writeHead(200);
-
-  let html = buildScriptList();
-
-  template = template.replace('[content]', html);
-  template += `<div>Hello world! from [${nodeEnv}] http://${showHost}:${port}</div>`;
+  let params = {
+    version: 123, 
+    content: buildScriptList(),
+    info: `<div>Hello world! from [${nodeEnv}] http://${showHost}:${port}</div>`,
+  }
+  template = templates.render(fs, 'index.html', params);
   res.write(template);
   res.end();
 }
@@ -53,10 +52,6 @@ function buildScriptList() {
   });
 
   return html;
-}
-
-function readTemplate (filePath) {
-  return fs.readFileSync(filePath, 'utf8');
 }
 
 function returnFile(res, filePath) {
