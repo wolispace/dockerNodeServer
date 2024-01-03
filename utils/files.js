@@ -1,6 +1,7 @@
 module.exports = {
   fs: require('node:fs'),
   path: require('node:path'),
+  querystring: require('node:querystring'),
   templates: require('../templates/templates.js'),
 
   // returns a list of files in the named folder
@@ -84,19 +85,20 @@ module.exports = {
       });
   
       req.on('end', () => {
-        const postData = querystring.parse(body);
+        const postData = this.querystring.parse(body);
         const { id, data } = postData;
-  
-        fs.writeFile(`./_saves/_save_${id}.txt`, data, err => {
-          if (err) {
-            console.error(err);
-            resolve(false); // Return false if there was an error
-          } else {
-            resolve(true); // Return true if the file was saved successfully
-          }
-        });
+
+        try {
+          this.fs.writeFileSync(`./_saves/_save_${id}.txt`, data);
+          resolve(true); // Return true if the file was saved successfully
+        } catch (err) {
+          console.error(err);
+          resolve(false); // Return false if there was an error
+        }
+        
+
       });
     });
   },
 
-}
+};

@@ -10,6 +10,13 @@
   <body>
     <h1>Test server</h1>
     <div class="content">${content}</div>
+    <div>
+      <form action="/" method="POST">
+        <input type="text" name="id" value="bob" />
+        <textarea name="data">This is not a pipe</textarea>
+        <input type="submit" value="go" />
+      </form>
+    </div>
     <div class="footer">${info}</div>
   </body>
 
