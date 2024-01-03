@@ -4,6 +4,12 @@ module.exports = {
   querystring: require('node:querystring'),
   templates: require('../templates/templates.js'),
 
+  // get a filename from the url eg: /layout.css or /src1/game.js
+  getFileFromUrl: function (req) {
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    return url.pathname;
+  },
+
   // returns a list of files in the named folder
   readFolder: function (folderPath) {
     return this.fs.readdirSync(folderPath).map(fileName => {
@@ -34,27 +40,30 @@ module.exports = {
     app.res.end();
   },
 
-  // loads a file and renders it in the wb browser 
-  render: function (app, filePath) {
+  getContentType: function(extname) {
     // Determine the content type
-    let extname = String(this.path.extname(filePath)).toLowerCase();
-    let contentType = 'text/html';
     const mimeTypes = {
       '.css': 'text/css',
       '.js': 'application/javascript',
       // Add more MIME types as needed
     };
+    
+    return mimeTypes[extname] || 'application/octet-stream';
+  },
+  
+  // loads a file and renders it in the wb browser 
+  render: function (app) {
+    let extname = String(this.path.extname(app.filePath)).toLowerCase();
 
-    contentType = mimeTypes[extname] || 'application/octet-stream';
 
     let fileFolder = extname == '.js' ? '.' : './public';
 
-    console.log(`Loading file ${fileFolder}${filePath}`);
+    console.log(`Loading file ${fileFolder}${app.filePath}`);
 
     try {
-      const content = this.fs.readFileSync(`${fileFolder}${filePath}`, 'utf8');
+      const content = this.fs.readFileSync(`${fileFolder}${app.filePath}`, 'utf8');
       // Serve the file
-      app.res.writeHead(200, { 'Content-Type': contentType });
+      app.res.writeHead(200, { 'Content-Type': this.getContentType(extname) });
       app.res.end(content, 'utf-8');
     } catch (err) {
       console.error(err);

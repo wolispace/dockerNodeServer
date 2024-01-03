@@ -13,18 +13,16 @@ app.url = `http://${app.showHost}:${app.port}`;
 const requestListener = function (req, res) {
   app.req = req;
   app.res = res;
+  app.filePath = files.getFileFromUrl(req);
 
-  // Parse the URL to get the path
-  const url = new URL(req.url, `http://${req.headers.host}`);
-  let filePath = url.pathname;
-  console.log(`Request ${req.method} for ${filePath}`);
+  console.log(`Request ${req.method} for ${app.filePath}`);
   if (req.method === 'POST') {
     files.saveData(app);
   } else {
-    if (filePath === '/') {
+    if (app.filePath === '/') {
       files.renderHomePage(app);
     } else {
-      files.render(app, filePath);
+      files.render(app);
     }
   }
 }
