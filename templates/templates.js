@@ -1,15 +1,16 @@
 // templating functions
 module.exports = {
+  fs: require('node:fs'),
   
   // reads the named file and replaces params with the values passed
-  render: function (fs, fileName, values) {
-   let template = this.read(fs, fileName);
+  render: function (fileName, values) {
+   let template = this.read(fileName);
    return this.fill(template, values);
   },
 
   // reads in a template files from te templates folder
-  read: function (fs, fileName) {
-    return fs.readFileSync(`./templates/${fileName}`, 'utf8');
+  read: function (fileName) {
+    return this.fs.readFileSync(`./templates/${fileName}`, 'utf8');
   },
 
   // returns the template with all ${key} replaced with the {key: "value", ...} passed in
