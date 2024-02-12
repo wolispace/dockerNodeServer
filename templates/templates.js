@@ -8,7 +8,7 @@ module.exports = {
    return this.fill(template, values);
   },
 
-  // reads in a template files from te templates folder
+  // reads in a template files from the templates folder
   read: function (fileName) {
     return this.fs.readFileSync(`./templates/${fileName}`, 'utf8');
   },

@@ -51,7 +51,7 @@ module.exports = {
     return mimeTypes[extname] || 'application/octet-stream';
   },
   
-  // loads a file and renders it in the wb browser 
+  // loads a file and renders it in the web browser 
   render: function (app) {
     let extname = String(this.path.extname(app.filePath)).toLowerCase();
 
