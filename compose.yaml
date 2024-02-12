@@ -7,10 +7,12 @@ services:
       - data:/data
     working_dir: /app
     environment:
-      - NODE_ENV=local
+      - NODE_ENV=${NODE_ENV}
+      - EXTERNAL_PORT=${EXTERNAL_PORT}
+      - INTERNAL_PORT=${INTERNAL_PORT}
     command: npm start
     ports:
-      - 8080:8080
+      - "${EXTERNAL_PORT}:${INTERNAL_PORT}"
 
 volumes:
   data:

@@ -1,3 +1,5 @@
-set NODE_ENV=dev
+echo off
+:: read the .env file
+for /F "delims=" %%i in (.env) do (set "%%i")
 docker compose up -d
-start "" http://localhost:8080
+start "" http://localhost:%EXTERNAL_PORT%

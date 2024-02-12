@@ -5,10 +5,11 @@ const app = {
   nodeEnv: process.env.NODE_ENV,
   host: '0.0.0.0',
   showHost: 'localhost',
-  port: 8080,
+  port: process.env.INTERNAL_PORT,
+  externalPort: process.env.EXTERNAL_PORT,
 };
 
-app.url = `http://${app.showHost}:${app.port}`;
+app.url = `http://${app.showHost}:${app.externalPort}`;
 
 const requestListener = function (req, res) {
   app.req = req;
