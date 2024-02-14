@@ -1,4 +1,5 @@
 const http = require("node:http");
+const https = require('node:https');
 const files = require('./utils/files.js');
 
 const server = {};
@@ -19,8 +20,8 @@ const app = {
   },
 };
 
-
-app.url = `http://${app.http.showHost}:${app.http.externalPort}`;
+app.http.url = `http://${app.http.showHost}:${app.http.externalPort}`;
+app.https.url = `https://${app.https.showHost}:${app.https.externalPort}`;
 
 const requestListener = function (req, res) {
   app.req = req;
@@ -41,6 +42,18 @@ const requestListener = function (req, res) {
 
 server.http = http.createServer(requestListener);
 server.http.listen(app.http.port, app.http.host, () => {
-  console.log(`\nServer is running on [${app.nodeEnv}] ${app.url}`);
+  console.log(`\nServer is running on [${app.nodeEnv}] ${app.http.url}`);
 });
+
+// self-sign by using cert.pem instead of obtaining a ca.pem for the real world
+server.https = https.createServer({
+  key: files.readFileSync('_keys/key.pem'),
+  cert: files.readFileSync('_keys/cert.pem'),
+  ca: files.readFileSync('_keys/cert.pem')
+}, requestListener);
+
+server.https.listen(app.https.port, app.https.host, () => {
+  console.log(`\nServer is running on https [${app.nodeEnv}] ${app.https.url}`);
+});
+
 
