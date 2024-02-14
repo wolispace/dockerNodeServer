@@ -17,6 +17,7 @@ services:
     command: npm start
     ports:
       - "${EXTERNAL_PORT}:${INTERNAL_PORT}"
+      - "${EXTERNAL_PORT_SSH}:${INTERNAL_PORT_SSH}"
 
 volumes:
   data:

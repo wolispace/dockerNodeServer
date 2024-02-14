@@ -34,10 +34,11 @@ module.exports = {
 
   renderHomePage: function (app) {
     let params = {
+      type: app.type,
       version: 123,
       content: `Hi from the content area`,
       scripts: this.buildScriptList(),
-      info: `<div>Hello world! from [${app.nodeEnv}] ${app.url}</div>`,
+      info: `<div>Hello world! from [${app.nodeEnv}] ${app[app.type].url}</div>`,
     }
     template = this.templates.render('index.html', params);
     app.res.write(template);

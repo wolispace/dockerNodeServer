@@ -28,7 +28,13 @@ const requestListener = function (req, res) {
   app.res = res;
   app.filePath = files.getFileFromUrl(req);
 
-  console.log(`Request ${req.method} for ${app.filePath}`);
+  app.type = req.socket.localPort == app.http.port ? 'http' : 'https';
+
+  // Get the original URL from the request
+  app.originalUrl = `${app.type}://${req.headers.host}${req.url}`;
+
+
+  console.log(`Request ${req.method} for ${app.filePath} on ${app.type} at ${app.originalUrl}`);
   if (req.method === 'POST') {
     files.saveData(app);
   } else {
