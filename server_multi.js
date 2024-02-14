@@ -1,4 +1,5 @@
 const http = require("node:http");
+const https = require('node:https');
 const files = require('./utils/files.js');
 
 const server = {};
@@ -19,8 +20,7 @@ const app = {
   },
 };
 
-
-app.url = `http://${app.http.showHost}:${app.http.externalPort}`;
+app.url = `http://${app.showHost}:${app.externalPort}`;
 
 const requestListener = function (req, res) {
   app.req = req;
@@ -40,7 +40,18 @@ const requestListener = function (req, res) {
 }
 
 server.http = http.createServer(requestListener);
-server.http.listen(app.http.port, app.http.host, () => {
+server.http.listen(app.port, app.host, () => {
+  console.log(`\nServer is running on [${app.nodeEnv}] ${app.url}`);
+});
+
+
+server.https = https.createServer({
+  key: files.readFileSync('_keys/key.pem'),
+  cert: files.readFileSync('_keys/cert.pem'),
+  ca: files.readFileSync('_keys/ca.pem')
+}, app);
+
+serverSsh.listen(app.port, app.host, () => {
   console.log(`\nServer is running on [${app.nodeEnv}] ${app.url}`);
 });
 

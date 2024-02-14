@@ -2,6 +2,8 @@ version: '3'
 services:
   app:
     image: node:alpine
+    networks:
+      - cowsvr_network
     volumes:
       - .:/app
       - data:/data
@@ -10,9 +12,15 @@ services:
       - NODE_ENV=${NODE_ENV}
       - EXTERNAL_PORT=${EXTERNAL_PORT}
       - INTERNAL_PORT=${INTERNAL_PORT}
+      - EXTERNAL_PORT_SSH=${EXTERNAL_PORT_SSH}
+      - INTERNAL_PORT_SSH=${INTERNAL_PORT_SSH}
     command: npm start
     ports:
       - "${EXTERNAL_PORT}:${INTERNAL_PORT}"
 
 volumes:
   data:
+
+networks:
+  cowsvr_network:
+    driver: bridge

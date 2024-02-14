@@ -4,6 +4,10 @@ module.exports = {
   querystring: require('node:querystring'),
   templates: require('../templates/templates.js'),
 
+  readFileSync(file) {
+   return this.fs.readFileSync(file); 
+  },
+
   // get a filename from the url eg: /layout.css or /src1/game.js
   getFileFromUrl: function (req) {
     const url = new URL(req.url, `http://${req.headers.host}`);
